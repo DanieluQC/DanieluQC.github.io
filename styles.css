@@ -1,0 +1,136 @@
+/* styles.css */
+body {
+    background-color: #1a1a1a;
+    /* Gris claro */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    /* Fondo blanco para el contenedor principal */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Sombra suave */
+}
+
+.employees {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.employee {
+    margin: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    /* Posición relativa para el div del empleado */
+    border: 1px solid #ccc;
+    /* Borde del div del empleado */
+    padding: 10px;
+    /* Espaciado interno */
+}
+
+.namedisp {
+    margin-bottom: 15px;
+    font-family: Arial, sans-serif;
+    /* Fuente del nombre del empleado */
+    font-size: 16px;
+    /* Tamaño de la fuente */
+    font-weight: bold;
+    /* Peso de la fuente en negrita */
+    color: #ffffff;
+    /* Color del texto gris oscuro */
+}
+
+.timer {
+    font-family: 'Courier New', Courier, monospace;
+    /* Fuente del temporizador */
+    font-size: 20px;
+    font-weight: bold;
+    /* Tamaño de la fuente */
+    color: #1a1a1a;
+    /* Color del texto azul */
+    background-color: #fff;
+    border-radius: 8px;
+
+}
+
+.controls {
+    margin-top: 10px;
+    color: salmon;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-family: Arial, sans-serif;
+}
+
+button:hover {
+    background-color: #ffb9b4;
+    /* Verde oscuro cuando se pasa el cursor sobre el botón */
+    color: white;
+}
+
+button:active {
+    background-color: #45a049;
+    /* Verde más oscuro cuando se hace clic en el botón */
+}
+
+
+.employees {
+    margin: 20px;
+}
+
+.divName {
+    background-color: brown;
+}
+
+.playbtn {
+    background-color: #84df87;
+    margin: 10px;
+}
+
+.pausebtn {
+    background-color: #eeec74;
+    margin: 10px;
+}
+
+.reloadbtn {
+    background-color: #ffa19b;
+    margin: 10px;
+}
+
+.boton-del {
+    position: absolute;
+    /* Posición absoluta para el botón */
+    top: 5px;
+    /* Distancia desde la parte superior del div del empleado */
+    right: 5px;
+    /* Distancia desde la parte derecha del div del empleado */
+    background-color: #ff0000;
+    /* Color de fondo rojo para el botón */
+    color: #fff;
+    /* Color del texto blanco */
+    border: none;
+    /* Quitar borde */
+    padding: 5px 10px;
+    /* Espaciado interno */
+    border-radius: 3px;
+    /* Bordes redondeados */
+    cursor: pointer;
+    /* Cambiar el cursor a una mano */
+}

@@ -5,7 +5,7 @@ addEmployeeBtn.addEventListener('click', addEmployee);
 resetBtn.addEventListener('click', resetAllTimers);
 
 function addEmployee() {
-    const name = prompt('Ingrese el nombre del empleado:');
+    const name = prompt('Ingrese el Nick:');
     if (name) { // Si se ingresó un nombre
         const employeesContainer = document.querySelector('.employees');
         const employeeDiv = document.createElement('div');

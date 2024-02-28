@@ -19,28 +19,27 @@ body {
     /* Sombra suave */
 }
 
-.employees {
-    margin-top: 20px;
+#employees-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 .employee {
+    flex: 0 1 300px;
+    /* Cambiado a flex-grow: 0 para evitar que se expanda */
     margin: 10px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #181818;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ffffff;
+    /* Cambiar color del borde a verde (#4CAF50) */
     position: relative;
-    /* Posición relativa para el div del empleado */
-    border: 1px solid #ccc;
-    /* Borde del div del empleado */
-    padding: 10px;
-    /* Espaciado interno */
+    text-align: center;
 }
 
-.namedisp {
+.employee-name {
     margin-bottom: 15px;
     font-family: Arial, sans-serif;
     /* Fuente del nombre del empleado */
@@ -71,6 +70,7 @@ body {
 }
 
 button {
+    margin: 5px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -91,19 +91,6 @@ button:active {
 }
 
 
-.employees {
-    margin: 20px;
-}
-
-.divName {
-    background-color: brown;
-}
-
-.playbtn {
-    background-color: #84df87;
-    margin: 10px;
-}
-
 .pausebtn {
     background-color: #eeec74;
     margin: 10px;
@@ -111,26 +98,43 @@ button:active {
 
 .reloadbtn {
     background-color: #ffa19b;
-    margin: 10px;
+
 }
 
-.boton-del {
+.delete-button {
     position: absolute;
-    /* Posición absoluta para el botón */
-    top: 5px;
-    /* Distancia desde la parte superior del div del empleado */
-    right: 5px;
-    /* Distancia desde la parte derecha del div del empleado */
+    top: 0px;
+    right: 0px;
     background-color: #ff0000;
-    /* Color de fondo rojo para el botón */
-    color: #fff;
-    /* Color del texto blanco */
+    /* Rojo */
+    color: white;
     border: none;
-    /* Quitar borde */
     padding: 5px 10px;
-    /* Espaciado interno */
-    border-radius: 3px;
-    /* Bordes redondeados */
+    border-radius: 5px;
     cursor: pointer;
-    /* Cambiar el cursor a una mano */
+}
+
+.play-button {
+    background-color: #555;
+    /* Verde */
+    color: rgb(0, 0, 0);
+}
+
+.play-button.paused {
+    background-color: #555;
+    /* Gris oscuro */
+}
+
+.current-time {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

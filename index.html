@@ -12,11 +12,10 @@
 <body>
     <div class="container">
         <h1>Control de Tiempo by Danielu</h1>
-        <button id="addEmployeeBtn">Añadir Temporizador</button>
-        <button id="resetBtn" onclick="resetAllTimers()">Reiniciar todo</button>
+        <button id="addEmployeeBtn" onclick="addEmployee()">Añadir Temporizador</button>
         <button id="descargarDatos" onclick="downloadEmployeeData()">Descargar Datos</button>
     </div>
-    <div class="employees">
+    <div id="employees-container">
     </div>
     <script src="script.js"></script>
 </body>

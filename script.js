@@ -1,204 +1,187 @@
-const addEmployeeBtn = document.getElementById('addEmployeeBtn');
-const resetBtn = document.getElementById('resetBtn');
-
-addEmployeeBtn.addEventListener('click', addEmployee);
-resetBtn.addEventListener('click', resetAllTimers);
-
-function addEmployee() {
-    const name = prompt('Ingrese el Nick:');
-    if (name) { // Si se ingresó un nombre
-        const employeesContainer = document.querySelector('.employees');
-        const employeeDiv = document.createElement('div');
-        employeeDiv.classList.add('employee');
-
-        const nameDisplay = document.createElement('div');
-        nameDisplay.className = 'namedisp';
-        nameDisplay.textContent = name;
-        employeeDiv.appendChild(nameDisplay);
-
-        const deleteEmployee = document.createElement('button');
-        deleteEmployee.textContent = 'X';
-        deleteEmployee.classList.add('boton-del');
-        deleteEmployee.addEventListener('click', function () {
-            employeeDiv.remove();
-        });
-        employeeDiv.appendChild(deleteEmployee);
-
-        const timerDisplay = document.createElement('div');
-        timerDisplay.classList.add('timer');
-        timerDisplay.textContent = '00:00:00';
-        employeeDiv.appendChild(timerDisplay);
-
-        const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'botones';
-        controlsDiv.classList.add('controls');
-
-        const startBtn = document.createElement('button');
-        startBtn.textContent = 'Play';
-        startBtn.className = 'playbtn';
-        startBtn.addEventListener('click', startTimer);
-        controlsDiv.appendChild(startBtn);
-
-        const pauseBtn = document.createElement('button');
-        pauseBtn.textContent = 'Pausar';
-        pauseBtn.className = 'pausebtn';
-        pauseBtn.addEventListener('click', pauseTimer);
-        controlsDiv.appendChild(pauseBtn);
-
-        const resetBtn = document.createElement('button');
-        resetBtn.textContent = 'Reiniciar';
-        resetBtn.className = 'reloadbtn';
-        resetBtn.addEventListener('click', resetTimer);
-        controlsDiv.appendChild(resetBtn);
-
-        employeeDiv.appendChild(controlsDiv);
-        employeesContainer.appendChild(employeeDiv);
-    }
-}
+// Objeto para almacenar los temporizadores de los empleados
 let timers = {};
-let tiempoInactivo = 0;
-let tiempoUltimaActividad = Date.now();
-// Verificar si el navegador es compatible con la API Visibility
-if (typeof document.hidden !== "undefined") {
-    // Adjuntar un manejador de eventos para detectar cambios en la visibilidad de la página
-    document.addEventListener("visibilitychange", function () {
-        // Si la página está visible, actualizar el tiempo inactivo y reanudar los temporizadores
-        if (!document.hidden) {
-            tiempoInactivo += Date.now() - tiempoUltimaActividad;
-            tiempoUltimaActividad = Date.now();
-            reanudarTimers();
-        } else {
-            // Si la página está oculta, actualizar el tiempo de última actividad
-            tiempoUltimaActividad = Date.now();
-        }
-    }, false);
+
+function getCurrentTime() {
+    const currentTime = new Date();
+    const hours = currentTime.getHours().toString().padStart(2, '0');
+    const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
 }
-// Función para reanudar todos los temporizadores
-function reanudarTimers() {
-    for (const name in timers) {
-        if (timers[name]) {
-            reanudarTimerParaEmpleado(name);
-        }
+
+// Función para agregar un nuevo empleado
+function addEmployee() {
+    // Obtener el nombre del empleado mediante una ventana emergente
+    const name = prompt('Ingrese Nick:');
+    if (!name) {
+        return; // Salir de la función si no se proporciona un nombre
     }
+
+    // Crear el div del empleado
+    const employeeDiv = document.createElement('div');
+    employeeDiv.classList.add('employee');
+    employeeDiv.dataset.name = name;
+
+    // Agregar botón para borrar el div del empleado
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'X';
+    deleteButton.classList.add('delete-button');
+    deleteButton.addEventListener('click', () => deleteEmployee(employeeDiv));
+    employeeDiv.appendChild(deleteButton);
+
+    // Agregar hora actual en formato horas:minutos
+    const currentTimeDiv = document.createElement('div');
+    currentTimeDiv.textContent = '--:--';
+    currentTimeDiv.classList.add('current-time');
+    employeeDiv.appendChild(currentTimeDiv);
+
+    // Agregar nombre del empleado
+    const nameDiv = document.createElement('div');
+    nameDiv.textContent = name;
+    nameDiv.classList.add('employee-name');
+    employeeDiv.appendChild(nameDiv);
+
+    // Agregar temporizador del empleado
+    const timerDiv = document.createElement('div');
+    timerDiv.textContent = '00:00:00';
+    timerDiv.classList.add('timer');
+    employeeDiv.appendChild(timerDiv);
+
+    // Agregar botones de control
+    const controlsDiv = document.createElement('div');
+
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start';
+    startButton.classList.add('play-button');
+    startButton.addEventListener('click', () => startTimer(name));
+    controlsDiv.appendChild(startButton);
+
+    const pauseButton = document.createElement('button');
+    pauseButton.textContent = 'Pause';
+    pauseButton.classList.add('pausebtn');
+    pauseButton.addEventListener('click', () => pauseTimer(name));
+    controlsDiv.appendChild(pauseButton);
+
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset';
+    resetButton.classList.add('reloadbtn');
+    resetButton.addEventListener('click', () => resetTimer(name));
+    controlsDiv.appendChild(resetButton);
+
+    employeeDiv.appendChild(controlsDiv);
+
+    // Agregar el div del empleado al contenedor
+    const container = document.getElementById('employees-container');
+    container.appendChild(employeeDiv);
 }
-// Función para reanudar un temporizador para un empleado específico
-function reanudarTimerParaEmpleado(nombreEmpleado) {
-    const employeeDiv = document.querySelector(`.employee[data-name="${nombreEmpleado}"]`);
-    const startTime = Date.now() - tiempoInactivo - parseInt(employeeDiv.dataset.elapsedTime, 10);
-    timers[nombreEmpleado] = setInterval(() => {
-        const timerDisplay = employeeDiv.querySelector('.timer');
-        const elapsed = Date.now() - startTime;
+
+// Función para eliminar el div del empleado
+function deleteEmployee(employeeDiv) {
+    employeeDiv.remove();
+}
+
+// Objeto para almacenar las fechas de inicio de los temporizadores de los empleados
+let startDates = {};
+// Objeto para almacenar los tiempos transcurridos al momento de pausar los temporizadores de los empleados
+let pausedTimes = {};
+
+function startTimer(name) {
+    const employeeDiv = document.querySelector(`.employee[data-name="${name}"]`);
+    const timerDiv = employeeDiv.querySelector('.timer');
+    const playButton = employeeDiv.querySelector('.play-button');
+    const currentTimeDiv = employeeDiv.querySelector('.current-time');
+
+
+    // Si el temporizador ya está en funcionamiento, no hacer nada
+    if (timers[name]) {
+        return;
+    }
+    if (currentTimeDiv.textContent === '--:--') {
+        // Obtener la hora actual
+        const currentTime = getCurrentTime();
+        // Actualizar el div de hora con la hora actual
+        currentTimeDiv.textContent = currentTime;
+    }
+
+    playButton.classList.add('play-button'); // Agregar clase de botón de reproducción
+    playButton.classList.remove('paused'); // Asegurarse de que el botón no esté pausado
+
+    const startDate = new Date();
+    if (pausedTimes[name]) {
+        // Si hay un tiempo pausado para este empleado, ajustar la fecha de inicio
+        startDate.setMilliseconds(startDate.getMilliseconds() - pausedTimes[name]);
+        delete pausedTimes[name]; // Eliminar el tiempo pausado
+    }
+
+    startDates[name] = startDate; // Almacenar la fecha de inicio
+
+    timers[name] = setInterval(() => {
+        const currentDate = new Date();
+        const elapsed = currentDate - startDates[name]; // Calcular el tiempo transcurrido desde la fecha de inicio
         const hours = Math.floor((elapsed / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((elapsed / (1000 * 60)) % 60);
         const seconds = Math.floor((elapsed / 1000) % 60);
-        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        // Actualizar el tiempo transcurrido en el atributo de datos del div del empleado
-        employeeDiv.dataset.elapsedTime = elapsed;
-    }, 1000); // 1000ms = 1 segundo
+        timerDiv.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+
+    // Cambiar el color del botón a verde
+    playButton.style.backgroundColor = '#4CAF50'; // Verde
 }
 
+// Función para pausar el temporizador de un empleado
+function pauseTimer(name) {
+    clearInterval(timers[name]);
+    timers[name] = null; // Eliminar el temporizador
+    const currentDate = new Date();
+    pausedTimes[name] = currentDate - startDates[name]; // Almacenar el tiempo transcurrido hasta el momento de pausar
 
-function startTimer(event) {
-    const employeeDiv = event.target.closest('.employee');
-    const name = employeeDiv.querySelector('div:first-child').textContent;
-    // Verificar si el temporizador ya está corriendo
-    if (!timers[name]) {
-        timers[name] = setInterval(() => {
-            const timerDisplay = employeeDiv.querySelector('.timer');
-            const time = timerDisplay.textContent.split(':');
-            let hours = parseInt(time[0], 10);
-            let minutes = parseInt(time[1], 10);
-            let seconds = parseInt(time[2], 10);
+    const employeeDiv = document.querySelector(`.employee[data-name="${name}"]`);
+    const playButton = employeeDiv.querySelector('.play-button');
 
-            seconds++;
-
-            if (seconds === 60) {
-                seconds = 0;
-                minutes++;
-            }
-
-            if (minutes === 60) {
-                minutes = 0;
-                hours++;
-            }
-
-            timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }, 1000); // 1000ms = 1 segundo
-    }
+    // Cambiar el color del botón a gris oscuro cuando se pausa
+    playButton.classList.add('paused');
+    playButton.style.backgroundColor = '#555'; // Gris oscuro
 }
 
-function pauseTimer(event) {
-    const employeeDiv = event.target.closest('.employee');
-    const name = employeeDiv.querySelector('div:first-child').textContent;
+// Función para reiniciar el temporizador de un empleado
+function resetTimer(name) {
+    const employeeDiv = document.querySelector(`.employee[data-name="${name}"]`);
+    const timerDiv = employeeDiv.querySelector('.timer');
+    const playButton = employeeDiv.querySelector('.play-button');
 
-    // Verificar si el temporizador está corriendo
-    if (timers[name]) {
-        clearInterval(timers[name]);
-        timers[name] = null;
-    }
+    timerDiv.textContent = '00:00:00';
+    clearInterval(timers[name]);
+    delete timers[name]; // Eliminar el temporizador
+    delete startDates[name]; // Eliminar la fecha de inicio
+    delete pausedTimes[name]; // Eliminar el tiempo pausado
+
+    // Restaurar el color original del botón
+    playButton.style.backgroundColor = ''; // Restaurar el color original
 }
-
-function resetTimer(event) {
-    const employeeDiv = event.target.closest('.employee');
-    const timerDisplay = employeeDiv.querySelector('.timer');
-    timerDisplay.textContent = '00:00:00';
-
-    const name = employeeDiv.querySelector('div:first-child').textContent;
-
-    // Verificar si el temporizador está corriendo
-    if (timers[name]) {
-        clearInterval(timers[name]);
-        timers[name] = null;
-    }
-}
-
-function resetAllTimers() {
-    // Reiniciar todos los temporizadores y vaciar el objeto timers
-    for (const name in timers) {
-        if (timers[name]) {
-            clearInterval(timers[name]);
-        }
-    }
-    timers = {};
-
-    // Reiniciar todos los temporizadores en la interfaz a 00:00:00
-    const timerDisplays = document.querySelectorAll('.timer');
-    timerDisplays.forEach(timerDisplay => {
-        timerDisplay.textContent = '00:00:00';
-    });
-}
-
-/// Function to download employee data
+// Función para descargar los datos de los empleados
 function downloadEmployeeData() {
-    // Get all employee divs
+    // Obtener la fecha actual
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+
+    // Crear el contenido del archivo
     const employeeDivs = document.querySelectorAll('.employee');
-
-    // Create a string to store employee information
-    let data = '';
-
-    // Iterate over each employee div to get the information
+    let data = 'Tiempos:\n';
     employeeDivs.forEach((employeeDiv, index) => {
-        const employeeName = employeeDiv.querySelector('.namedisp').textContent;
-        const employeeTime = employeeDiv.querySelector('.timer').textContent;
-
-        // Add employee information to the string
-        data += `${employeeName} - ${employeeTime}\n`;
+        const name = employeeDiv.querySelector('.employee-name').textContent;
+        const time = employeeDiv.querySelector('.timer').textContent;
+        data += `${name} - ${time}\n`;
     });
 
-    // Create a Blob object with the data
-    const blob = new Blob([data], { type: 'text/plain' });
+    // Crear un elemento <a> para descargar el archivo
+    const downloadLink = document.createElement('a');
+    downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(data);
+    downloadLink.download = `registro_${formattedDate}.txt`; // Nombre del archivo
 
-    // Create a URL object for the Blob
-    const url = URL.createObjectURL(blob);
+    // Agregar el enlace al cuerpo del documento y simular un clic para iniciar la descarga
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
 
-    // Create an <a> element to download the file
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tiempos.txt';
-
-    // Simulate a click on the link to initiate the download
-    a.click();
-
-    // Revoke the URL object
-    URL.revokeObjectURL(url);
+    // Eliminar el enlace después de la descarga
+    document.body.removeChild(downloadLink);
 }
+

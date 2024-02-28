@@ -1,0 +1,140 @@
+/* styles.css */
+body {
+    background-color: #1a1a1a;
+    /* Gris claro */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    /* Fondo blanco para el contenedor principal */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Sombra suave */
+}
+
+#employees-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.employee {
+    flex: 0 1 300px;
+    /* Cambiado a flex-grow: 0 para evitar que se expanda */
+    margin: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #181818;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ffffff;
+    /* Cambiar color del borde a verde (#4CAF50) */
+    position: relative;
+    text-align: center;
+}
+
+.employee-name {
+    margin-bottom: 15px;
+    font-family: Arial, sans-serif;
+    /* Fuente del nombre del empleado */
+    font-size: 16px;
+    /* Tamaño de la fuente */
+    font-weight: bold;
+    /* Peso de la fuente en negrita */
+    color: #ffffff;
+    /* Color del texto gris oscuro */
+}
+
+.timer {
+    font-family: 'Courier New', Courier, monospace;
+    /* Fuente del temporizador */
+    font-size: 20px;
+    font-weight: bold;
+    /* Tamaño de la fuente */
+    color: #1a1a1a;
+    /* Color del texto azul */
+    background-color: #fff;
+    border-radius: 8px;
+
+}
+
+.controls {
+    margin-top: 10px;
+    color: salmon;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-family: Arial, sans-serif;
+}
+
+button:hover {
+    background-color: #ffb9b4;
+    /* Verde oscuro cuando se pasa el cursor sobre el botón */
+    color: white;
+}
+
+button:active {
+    background-color: #45a049;
+    /* Verde más oscuro cuando se hace clic en el botón */
+}
+
+
+.pausebtn {
+    background-color: #eeec74;
+    margin: 10px;
+}
+
+.reloadbtn {
+    background-color: #ffa19b;
+
+}
+
+.delete-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #ff0000;
+    /* Rojo */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.play-button {
+    background-color: #555;
+    /* Verde */
+    color: rgb(0, 0, 0);
+}
+
+.play-button.paused {
+    background-color: #555;
+    /* Gris oscuro */
+}
+
+.current-time {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

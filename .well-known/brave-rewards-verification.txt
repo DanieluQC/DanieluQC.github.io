@@ -1,0 +1,4 @@
+This is a Brave Creators publisher verification file.
+
+Domain: danieluqc.github.io
+Token: d7e7c9d5462d8fc6b98e819c2ff58da5d1921270a36fdef1112306ccbd072ce7
